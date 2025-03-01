@@ -72,7 +72,7 @@ export default function AppRoutes() {
         <Route path="event/:id" element={<EventPage />} />
         <Route path="categories/:categoryName" element={<CategoryPage />} />
         <Route
-          path="event/:id/payment"
+          path="event/:id/checkout"
           element={<ProtectedRoute element={<PaymentPage />} />}
         />
         <Route

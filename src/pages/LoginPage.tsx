@@ -11,13 +11,10 @@ function LoginPage() {
   const dispatch = useDispatch();
   const location = useLocation();
   const {pathname} = location.state?.from || { pathname: "/" };
-  console.log(pathname);
   
 
   const handleSubmit = async (values: any) => {
     if (values.email && values.password) {
-      console.log("entered");
-
       try {
         const response = await fetch(
           `${import.meta.env.VITE_APP_API_URL}/users?email_like=${
@@ -31,7 +28,6 @@ function LoginPage() {
           dispatch(setToken(user[0].token));
           dispatch(setUser(user[0]));
           localStorage.setItem("token", user[0].token);
-          console.log(pathname);
           
           navigate(pathname);
         }

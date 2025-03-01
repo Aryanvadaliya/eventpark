@@ -22,6 +22,7 @@ import {
   Soup,
 } from "lucide-react";
 import EventBox from "../Components.tsx/EventBox";
+import { useDebounce } from "../hooks/useDebounce";
 
 function LandingPage() {
   const [nameInput, setNameInput] = useState("");
@@ -29,6 +30,8 @@ function LandingPage() {
   const [selectedCity, setSelectedCity] = useState("");
   const [categories, setCategories] = useState([]);
   const [cities, setCities] = useState(citiesData);
+
+  const debouncedValue = useDebounce(nameInput, 700);
 
   const iconMapping: { [key: string]: React.ComponentType } = {
     Music: Music,
@@ -50,7 +53,7 @@ function LandingPage() {
         const response = await fetch(
           `${
             import.meta.env.VITE_APP_API_URL
-          }/events?name_like=${nameInput}&location_like=${selectedCity}`
+          }/events?name_like=${debouncedValue}&location_like=${selectedCity}`
         );
         const eventList = await response.json();
         setEventList(eventList);
@@ -58,7 +61,7 @@ function LandingPage() {
         console.log(error);
       }
     })();
-  }, [nameInput, selectedCity]);
+  }, [debouncedValue, selectedCity]);
 
   useEffect(() => {
     (async function getCategories() {

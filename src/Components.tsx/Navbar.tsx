@@ -22,7 +22,6 @@ function Navbar() {
   };
 
   const handleSidebarClose = () => setIsSidebarOpen(false);
-  console.log(user);
   
   return (
     <>

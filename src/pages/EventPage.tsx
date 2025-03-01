@@ -40,7 +40,7 @@ function EventPage() {
               </p>
             </div>
             <Link
-              to={`/event/${id}/payment`}
+              to={`/event/${id}/checkout`}
               state={{ from: `/event/${id}` }}
               className="bg-blue-500 block text-center w-full text-white py-2 rounded-md mt-4"
             >
