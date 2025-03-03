@@ -7,7 +7,7 @@ import {
 import { citiesData } from "../utils/citiesData";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { EventData } from "../utils/types";
+import { EventData, Options } from "../utils/types";
 import {
   BookOpen,
   BriefcaseBusiness,
@@ -29,7 +29,6 @@ function LandingPage() {
   const [eventList, setEventList] = useState<Array<EventData>>([]);
   const [selectedCity, setSelectedCity] = useState("");
   const [categories, setCategories] = useState([]);
-  const [cities, setCities] = useState(citiesData);
 
   const debouncedValue = useDebounce(nameInput, 700);
 
@@ -75,7 +74,10 @@ function LandingPage() {
         console.log(error);
       }
     })();
+
   }, []);
+  console.log(eventList);
+  
 
   return (
     <>
@@ -90,14 +92,14 @@ function LandingPage() {
           />
 
           <Autocomplete
-            options={cities}
+            options={citiesData}
             className="md:w-[40%] border-none outline-none"
             filterOptions={createFilterOptions({
-              stringify: (option) => option.label,
+              stringify: (option: Options) => option.label,
               matchFrom: "start",
               limit: 10,
             })}
-            onChange={(e, city) => setSelectedCity(city?.value ?? "")}
+            onChange={(e: any, city: Options| null) => setSelectedCity(city?.value ?? "")}
             renderInput={(params) => (
               <TextField {...params} label="Select city" />
             )}

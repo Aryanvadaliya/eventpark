@@ -3,9 +3,10 @@ import { ChevronDown, CircleUserRound, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { ReduxState } from "../utils/types";
 
 function Navbar() {
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: ReduxState) => state.auth.user);
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState();

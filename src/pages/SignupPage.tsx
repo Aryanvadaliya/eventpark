@@ -3,9 +3,11 @@ import { isEmptyArray, useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { setToken, setUser } from "../store/authSlice";
+import { useDispatch } from "react-redux";
 
 function SignupPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const initialValues = {
     email: "",
     password: "",
@@ -113,6 +115,4 @@ function SignupPage() {
 }
 
 export default SignupPage;
-function dispatch(arg0: any) {
-  throw new Error("Function not implemented.");
-}
+

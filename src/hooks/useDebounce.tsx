@@ -1,10 +1,10 @@
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useDebounce = (
-  value: SetStateAction<string | undefined>,
+  value: string,
   delay: number | undefined
 ) => {
-  const [debounceValue, setDebounceValue] = useState<string>();
+  const [debounceValue, setDebounceValue] = useState<string>('');
 
   useEffect(() => {
     const timeoutId = setTimeout(() => setDebounceValue(value), delay);

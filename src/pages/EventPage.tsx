@@ -28,7 +28,7 @@ function EventPage() {
         <p className="text-4xl mb-5 text-blue-500">{eventData?.name}</p>
         <div className="flex flex-wrap">
           <div className="lg:w-4/12 w-[97%]">
-            <img src={eventData?.image} alt="" className="event-picture " />
+            <img src={eventData?.image} alt="" loading="lazy" className="event-picture " />
             <div className="shadow-md  p-4  rounded-md">
               <p className="text-slate-600">Price</p>
               <p>

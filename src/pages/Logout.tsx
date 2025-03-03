@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { removeAuth } from "../store/authSlice"
-import { Navigate, redirect } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 
 function Logout() {
   const dispatch = useDispatch()

@@ -16,8 +16,10 @@ import SignupPage from "../pages/SignupPage";
 import MasterLayout from "../Components.tsx/MasterLayout";
 import {  ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import PaymentPage from "../pages/PaymentPage";
+import CheckoutPage from "../pages/CheckoutPage";
 import Dashboard from "../pages/admin/Dashboard";
+import { ReduxState } from "../utils/types";
+import PaymentPage from "../pages/PaymentPage";
 
 const ProtectedRoute = ({ element }: { element: ReactNode }) => {
   const user = useSelector((state: {auth: { user: any} }) => state.auth.user);
@@ -51,7 +53,7 @@ interface RolesAuthProps {
   roles?: Role[];
 }
 const RolesAuth: React.FC<RolesAuthProps> = ({ children, roles }) => {
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: ReduxState) => state.auth.user);
   const navigate = useNavigate();
   useEffect(() => {
     console.log(roles?.some((role) => role.includes(user.role)))
@@ -73,6 +75,10 @@ export default function AppRoutes() {
         <Route path="categories/:categoryName" element={<CategoryPage />} />
         <Route
           path="event/:id/checkout"
+          element={<ProtectedRoute element={<CheckoutPage />} />}
+        />
+        <Route
+          path="/payment"
           element={<ProtectedRoute element={<PaymentPage />} />}
         />
         <Route

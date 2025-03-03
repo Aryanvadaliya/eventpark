@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
 export const ErrorComponent = () => {
   return (
     <div className="w-full h-full flex content-center items-center">
@@ -8,13 +9,19 @@ export const ErrorComponent = () => {
         <p className="text-center font-normal mt-3 text-base">
           Sorry! Something Went Wrong
         </p>
-        <Link to='/' className="bg-blue-500 text-white py-2 px-4 rounded-md ">Back to home</Link>
+        <Link to='/' className="bg-blue-500 text-white py-2 px-4 rounded-md ">
+          Back to home
+        </Link>
       </div>
     </div>
   );
 };
 
-class ErrorBoundary extends React.Component {
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class ErrorBoundary extends React.Component<any, ErrorBoundaryState> {
   constructor(props: any) {
     super(props);
     this.state = { hasError: false };
@@ -22,8 +29,7 @@ class ErrorBoundary extends React.Component {
 
   componentDidUpdate() {
     if (this.state.hasError) {
-      // eslint-disable-next-line
-      this.state.hasError = false;
+      this.setState({ hasError: false }); // Use setState here for state updates
     }
   }
 

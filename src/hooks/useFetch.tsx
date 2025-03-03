@@ -22,7 +22,7 @@ export const useFetch = ({
         const response = await fetch(url, {
           method: isPost ? "POST" : "GET",
           headers: { "Content-Type": "application/json" },
-          body: !isPost ? JSON.stringify(body) : {},
+          body: isPost ? JSON.stringify(body) : null,
         });
         const json = await response.json();
         setData(json);
