@@ -4,6 +4,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 import { useFetch } from "../hooks/useFetch"; // Assuming this is a custom hook
 import CardForm from "../Components.tsx/CardForm";
+import { CircularProgress } from "@mui/material";
 
 // Load your Stripe public key
 const stripePromise = loadStripe(
@@ -15,11 +16,15 @@ function PaymentPage() {
   const { ticketDetails, totalPrice } = location.state;
 
   // Fetch the client secret from your backend (assumed to be working correctly)
-  const { data, isLoading }: {data: {clientSecret: string} | undefined, isLoading: boolean} = useFetch({
-    endpoint: "get-intent",
-    isPost: true,
-    body: { amount: totalPrice }, // amount should be in cents
-  })
+  const {
+    data,
+    isLoading,
+  }: { data: { clientSecret: string } | undefined; isLoading: boolean } =
+    useFetch({
+      endpoint: "get-intent",
+      method: "POST",
+      body: { amount: totalPrice }, // amount should be in cents
+    });
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -32,10 +37,10 @@ function PaymentPage() {
           stripe={stripePromise}
           options={{ clientSecret: data.clientSecret }}
         >
-          <CardForm clientSecret={data.clientSecret} />
+          <CardForm totalPrice={totalPrice} ticketDetails={ticketDetails}/>
         </Elements>
       ) : (
-        <div>No client secret found. Something went wrong.</div>
+        <CircularProgress />
       )}
     </div>
   );

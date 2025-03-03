@@ -1,5 +1,11 @@
 import { Drawer, Popover } from "@mui/material";
-import { ChevronDown, CircleUserRound, LogOut, Menu } from "lucide-react";
+import {
+  ChevronDown,
+  CircleUserRound,
+  LogOut,
+  Menu,
+  Ticket,
+} from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -23,7 +29,7 @@ function Navbar() {
   };
 
   const handleSidebarClose = () => setIsSidebarOpen(false);
-  
+
   return (
     <>
       <div className="flex items-center justify-between border-b p-3 border-black">
@@ -58,7 +64,16 @@ function Navbar() {
           }}
           className="mt-4"
         >
-          <div className="px-4 py-2">
+          <div className="px-4 py-2 flex flex-col gap-3">
+            <Link
+              to={"/my-tickets"}
+              className="flex gap-4 items-cente"
+              onClick={handleClose}
+            >
+              <Ticket />
+              My tickets
+            </Link>
+            <hr />
             <Link
               to={"/logout"}
               className=" flex gap-4 items-center text-red-500"
