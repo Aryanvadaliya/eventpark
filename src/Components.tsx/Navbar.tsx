@@ -2,17 +2,17 @@ import { Drawer, Popover } from "@mui/material";
 import {
   ChevronDown,
   CircleUserRound,
+  Home,
   LogOut,
   Menu,
   Ticket,
 } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { ReduxState } from "../utils/types";
+import { useAuth } from "../hooks/AuthContext";
 
 function Navbar() {
-  const user = useSelector((state: ReduxState) => state.auth.user);
+  const { currentUser } = useAuth();
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState();
@@ -38,14 +38,14 @@ function Navbar() {
             Event<span className="text-blue-500">Park</span>
           </p>
         </Link>
-        {user && (
+        {currentUser && (
           <div
-            className="md:flex items-center content-center cursor-pointer hidden"
+            className="flex items-center content-center cursor-pointer "
             onClick={handleProfileClick}
           >
             <CircleUserRound size={32} className=" me-2" />
             <p className="font-semibold">
-              {user.firstName} {user.lastName}
+              {currentUser.firstName} {currentUser.lastName}
             </p>
             <ChevronDown size={20} />
           </div>
@@ -65,6 +65,15 @@ function Navbar() {
           className="mt-4"
         >
           <div className="px-4 py-2 flex flex-col gap-3">
+          <Link
+              to={"/"}
+              className="flex gap-4 items-cente"
+              onClick={handleClose}
+            >
+              <Home />
+              Home
+            </Link>
+            <hr />
             <Link
               to={"/my-tickets"}
               className="flex gap-4 items-cente"
@@ -84,17 +93,39 @@ function Navbar() {
             </Link>
           </div>
         </Popover>
-        <Menu onClick={toggleSidebar} className="cursor-pointer md:hidden" />
+        {/* <Menu onClick={toggleSidebar} className="cursor-pointer md:hidden" /> */}
 
-        <Drawer
+        {/* <Drawer
           open={isSidebarOpen}
           anchor="right"
           onClose={handleSidebarClose}
         >
-          <Link to={"/my-tickets"}>MY tickets</Link>
-        </Drawer>
+          <div className="px-4 py-2 flex flex-col justify-between h-screen  gap-3">
+            <div>
+              <p className="text-xl font-bold underline">Menu</p>
 
-        {!user && (
+              <Link
+                to={"/my-tickets"}
+                className="flex gap-4 items-cente"
+                onClick={handleClose}
+              >
+                <Ticket />
+                My tickets  
+              </Link>
+              <hr />
+            </div>
+            <Link
+              to={"/logout"}
+              className=" flex gap-4 items-center text-red-500"
+              onClick={handleClose}
+            >
+              <LogOut color="#fb2c36" />
+              Logout
+            </Link>
+          </div>
+        </Drawer> */}
+
+        {!currentUser && (
           <div>
             <Link
               to={"/auth/login"}

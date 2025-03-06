@@ -2,16 +2,16 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import {  Outlet, useNavigate } from 'react-router-dom'
 import { ReduxState } from '../utils/types';
+import { useAuth } from '../hooks/AuthContext';
 
 function AuthLayout() {
-  const user = useSelector((state: ReduxState) => state.auth.user)
-  console.log(user);
+  const {currentUser} = useAuth()
   
   const navigate = useNavigate()
   useEffect(() => {
-      if(user)
+      if(currentUser)
         navigate('/')
-  }, [user])
+  }, [currentUser])
 
   return (
     <>

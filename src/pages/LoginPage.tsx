@@ -3,15 +3,16 @@ import { isEmptyArray, useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { setToken, setUser } from "../store/authSlice";
+import { setToken } from "../store/authSlice";
+import { useAuth } from "../hooks/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
   const initialValues = { email: "", password: "" };
   const dispatch = useDispatch();
   const location = useLocation();
-  const {pathname} = location.state?.from || { pathname: "/" };
-  
+  const { pathname } = location.state?.from || { pathname: "/" };
+  const { setUserId, setCurrentUser } = useAuth();
 
   const handleSubmit = async (values: any) => {
     if (values.email && values.password) {
@@ -22,13 +23,14 @@ function LoginPage() {
           }&password_like=${values.password}`
         );
         const user = await response.json();
+        
         if (isEmptyArray(user)) toast("User doesn't exist", { type: "error" });
         else {
           toast("Login Successful", { type: "success" });
           dispatch(setToken(user[0].token));
-          dispatch(setUser(user[0]));
-          localStorage.setItem("token", user[0].token);
-          
+          localStorage.setItem("userId", JSON.stringify(user[0].id));
+          setUserId(user[0].id);
+          setCurrentUser(user[0])
           navigate(pathname);
         }
       } catch (error) {
@@ -43,7 +45,6 @@ function LoginPage() {
     initialValues: initialValues,
     onSubmit: handleSubmit,
   });
-
   const { values, errors, getFieldProps } = formik;
 
   return (

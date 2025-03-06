@@ -22,6 +22,7 @@ export type Auth = {
 };
 
 export interface UserData {
+  id: string
   tickets: any;
   firstName: string;
   lastName: string;

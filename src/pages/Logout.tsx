@@ -1,18 +1,16 @@
-import { useEffect } from "react"
-import { useDispatch } from "react-redux"
-import { removeAuth } from "../store/authSlice"
-import { Navigate } from "react-router-dom"
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { removeAuth } from "../store/authSlice";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/AuthContext";
 
 function Logout() {
-  const dispatch = useDispatch()
+  const { logout } = useAuth();
   useEffect(() => {
-    dispatch(removeAuth())
-    localStorage.clear()
-  }, [])
-   
-  return (
-    <Navigate to="/" />
-  )
+    logout();
+  }, []);
+
+  return <Navigate to="/" />;
 }
 
-export default Logout
+export default Logout;

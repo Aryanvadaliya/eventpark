@@ -1,13 +1,29 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Minus, Plus } from "lucide-react";
+import { useFetch } from "../hooks/useFetch";
+
+interface Seating {
+  zone: string;
+  price: number;
+  id: number;
+  isActive: boolean;
+  quantity: number;
+}
 
 function CheckoutPage() {
-  const [seating, setSeating] = useState([
-    { name: "General", price: 500, id: 1, isActive: false, quantity: 0 },
-    { name: "fanzone", price: 800, id: 2, isActive: false, quantity: 0 },
-    { name: "VIP zone", price: 1200, id: 3, isActive: false, quantity: 0 },
-    { name: "VVIP Tables", price: 5000, id: 4, isActive: false, quantity: 0 },
+  const { id } = useParams();
+  const { data, isLoading } = useFetch({
+    endpoint: `events/${id}`,
+    method: "GET",
+    skip: false,
+  });
+
+  const [seating, setSeating] = useState<Seating[]>([
+    { zone: "General", price: 500, id: 1, isActive: false, quantity: 0 },
+    { zone: "fanzone", price: 800, id: 2, isActive: false, quantity: 0 },
+    { zone: "VIP zone", price: 1200, id: 3, isActive: false, quantity: 0 },
+    { zone: "VVIP Tables", price: 5000, id: 4, isActive: false, quantity: 0 },
   ]);
 
   const totalPrice = seating.reduce(
@@ -58,7 +74,7 @@ function CheckoutPage() {
               key={seat.id}
             >
               <div>
-                <p className="text-xl">{seat.name}</p>
+                <p className="text-xl">{seat.zone}</p>
                 <p>{seat.price} Rs.</p>
               </div>
               <div>
@@ -105,7 +121,14 @@ function CheckoutPage() {
                   ? "bg-blue-500"
                   : "pointer-events-none bg-slate-400"
               }`}
-              state={{ticketDetails: seating.filter((seat) => seat.isActive), totalPrice: totalPrice}}
+              state={{
+                ticketDetails: {
+                  ...seating.filter((seat) => seat.isActive)[0],
+
+                  ...data,
+                },
+                totalPrice: totalPrice,
+              }}
             >
               Proceed
             </Link>

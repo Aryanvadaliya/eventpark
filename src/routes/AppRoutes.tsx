@@ -14,15 +14,18 @@ import LoginPage from "../pages/LoginPage";
 import AuthLayout from "../Components.tsx/AuthLayout";
 import SignupPage from "../pages/SignupPage";
 import MasterLayout from "../Components.tsx/MasterLayout";
-import {  ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import CheckoutPage from "../pages/CheckoutPage";
 import Dashboard from "../pages/admin/Dashboard";
 import { ReduxState } from "../utils/types";
 import PaymentPage from "../pages/PaymentPage";
+import { useAuth } from "../hooks/AuthContext";
+import TicketPage from "../pages/TicketPage";
+import { RolesAuth } from "../Components.tsx/RolesAuth";
 
 const ProtectedRoute = ({ element }: { element: ReactNode }) => {
-  const user = useSelector((state: {auth: { user: any} }) => state.auth.user);
+  const userId = JSON.parse(localStorage.getItem("userId")) || null
   const location = useLocation();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -33,42 +36,30 @@ const ProtectedRoute = ({ element }: { element: ReactNode }) => {
     }, 10);
 
     return () => clearTimeout(timer);
-  }, [user]);
+  }, [userId]);
 
   if (isLoading) {
     return <div></div>;
   }
 
-  if (!user) {
+  if (!userId) {
     return <Navigate to="/auth/login" state={{ from: location }} />;
   }
 
   return element;
 };
 
-type Role = string;
-
-interface RolesAuthProps {
-  children: ReactNode;
-  roles?: Role[];
-}
-const RolesAuth: React.FC<RolesAuthProps> = ({ children, roles }) => {
-  const user = useSelector((state: ReduxState) => state.auth.user);
-  const navigate = useNavigate();
-  useEffect(() => {
-    console.log(roles?.some((role) => role.includes(user.role)))
-    
-    if (!roles?.some((role) => role.includes(user.role))) navigate("/error/404");
-  }, []);
-
-  return children;
-};
-
 export default function AppRoutes() {
+  const { currentUser } = useAuth();
   return (
     <Routes>
       <Route element={<MasterLayout />}>
-        <Route index element={<LandingPage />} />
+        <Route
+          index
+          element={
+            currentUser?.role === "admin" ? <Dashboard /> : <LandingPage />
+          }
+        />
         <Route path="error/*" element={<ErrorComponent />} />
 
         <Route path="event/:id" element={<EventPage />} />
@@ -76,6 +67,10 @@ export default function AppRoutes() {
         <Route
           path="event/:id/checkout"
           element={<ProtectedRoute element={<CheckoutPage />} />}
+        />
+        <Route
+          path="/my-tickets"
+          element={<ProtectedRoute element={<TicketPage />} />}
         />
         <Route
           path="/payment"

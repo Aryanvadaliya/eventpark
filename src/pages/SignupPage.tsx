@@ -2,12 +2,12 @@ import { TextField } from "@mui/material";
 import { isEmptyArray, useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { setToken, setUser } from "../store/authSlice";
+import { setToken } from "../store/authSlice";
 import { useDispatch } from "react-redux";
 
 function SignupPage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const initialValues = {
     email: "",
     password: "",
@@ -21,27 +21,29 @@ function SignupPage() {
       values.firstName &&
       values.lastName
     ) {
-      console.log(values);
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_APP_API_URL}/users`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...values,
-            token: "bjhbewuivbiwjeb382y5y738hfuie",
-            role: "user",
-          }),
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_APP_API_URL}/users`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...values,
+              token: "bjhbewuivbiwjeb382y5y738hfuie",
+              role: "user",
+            }),
+          }
+        );
         const user = await response.json();
         if (isEmptyArray(user)) toast("User doesn't exist", { type: "error" });
         else {
           toast("Login Successful", { type: "success" });
           dispatch(setToken(user[0].token));
-          dispatch(setUser(user[0]));
-          localStorage.setItem("token", user[0].token);
+          localStorage.setItem("userId", user[0].id);
+
           navigate("/");
         }
       } catch (error) {
@@ -115,4 +117,3 @@ function SignupPage() {
 }
 
 export default SignupPage;
-

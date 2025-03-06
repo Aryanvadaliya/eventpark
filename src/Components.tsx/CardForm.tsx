@@ -4,23 +4,39 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useFetch } from "../hooks/useFetch";
 import { useDispatch, useSelector } from "react-redux";
-import { ReduxState } from "../utils/types";
-import { setUser } from "../store/authSlice";
+import { useAuth } from "../hooks/AuthContext";
 
-function CardForm({ totalPrice, ticketDetails }: { totalPrice: number; ticketDetails: Object }) {
+function CardForm({
+  totalPrice,
+  ticketDetails,
+}: {
+  totalPrice: number;
+  ticketDetails: Object;
+}) {
   const stripe = useStripe();
   const elements = useElements();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const user = useSelector((state: ReduxState) => state.auth.user)
+  const { currentUser, setCurrentUser } = useAuth();
 
+  const [isSkip, setIsSkip] = useState(true);
+
+  const { data } = useFetch({
+    endpoint: `users/${currentUser.id}`,
+    method: "PUT",
+    body: JSON.stringify({
+      ...currentUser,
+      tickets: [...(currentUser?.tickets || []), ticketDetails],
+    }),
+    skip: isSkip,
+  });
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!stripe || !elements) {
@@ -53,24 +69,30 @@ function CardForm({ totalPrice, ticketDetails }: { totalPrice: number; ticketDet
       setError(error.message || "Payment failed");
     }
     if (paymentIntent && paymentIntent.status === "succeeded") {
+      setIsSkip(false);
       setIsLoading(false);
       toast("Payment succesfful", { type: "success" });
-      const {data, isLoading} = useFetch({endpoint: `/users/{user.id}`, method: "PUT", body: {...user, tickets: [...user?.tickets, ticketDetails]}})
-      console.log(data);
-      
-    //   dispatch(setUser(data))
-      setTimeout(() => navigate("/my-ticket"), 2000);
+      setTimeout(() => navigate("/my-tickets"), 2000);
     }
   };
-
+  useEffect(() => {
+    if (data) {
+      setCurrentUser(data);
+      setIsSkip(true);
+    }
+  }, [data]);
   return (
-      <form onSubmit={handleSubmit}>
-        <PaymentElement />
-        {error && <div className="error">{error}</div>}
-        <button type="submit" disabled={isLoading} className="bg-blue-500 p-3 text-white mt-4 w-full">
-          {isLoading ? "Processing" : `Pay ${totalPrice} Rs`}
-        </button>
-      </form>
+    <form onSubmit={handleSubmit}>
+      <PaymentElement />
+      {error && <div className="error">{error}</div>}
+      <button
+        type="submit"
+        disabled={isLoading}
+        className="bg-blue-500 p-3 text-white mt-4 w-full"
+      >
+        {isLoading ? "Processing" : `Pay ${totalPrice} Rs`}
+      </button>
+    </form>
   );
 }
 

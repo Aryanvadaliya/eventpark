@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import { persistor, store } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
+import AuthProvider from "./hooks/AuthContext";
 
 function App() {
   return (
@@ -13,9 +14,11 @@ function App() {
       <ErrorBoundary>
         <Provider store={store}>
           <PersistGate persistor={persistor}>
-            <AppRoutes />
-            <ToastContainer />
-            <Outlet />
+            <AuthProvider>
+              <AppRoutes />
+              <ToastContainer className={'m-4'}/>
+              <Outlet />
+            </AuthProvider>
           </PersistGate>
         </Provider>
       </ErrorBoundary>

@@ -1,35 +1,53 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-export const useFetch = ({
-  endpoint,
-  method= "GET",
-  body = {},
-}: {
+interface UseFetchOptions {
   endpoint: string;
-  method?: string;
-  body?: any;
-}) => {
-  const [data, setData] = useState();
-  const [isLoading, setIsLoading] = useState(false);
-  const url = `${import.meta.env.VITE_APP_API_URL}/${endpoint ?? ''}`;
-  
-  useEffect(() => {
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  body?:  null | string;
+  skip?: boolean;
+}
+
+export function useFetch({
+  endpoint,
+  method,
+  body = null,
+  skip = false,
+}: UseFetchOptions) {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState<boolean>(!skip);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
     try {
-      (async function getData() {
-        setIsLoading(true);
-        const response = await fetch(url, {
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_API_URL}/${endpoint ?? ""}`,
+        {
           method: method,
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        });
-        const json = await response.json();
-        setData(json);
-      })();
-    } catch (error) {
-      console.log(error);
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: body && method !== "GET" ? body : null,
+        }
+      );
+
+      const result = await response.json();
+      setData(result);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred"
+      );
     } finally {
       setIsLoading(false);
     }
-  }, []);
-  return { data, isLoading };
-};
+  }, [endpoint, method, body]);
+  useEffect(() => {
+    if (!skip) {
+      fetchData();
+    }
+  }, [fetchData, skip]);
+
+  return { data, isLoading, error, fetchData };
+}
