@@ -4,10 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { setToken } from "../store/authSlice";
 import { useDispatch } from "react-redux";
+import { useAuth } from "../hooks/AuthContext";
 
 function SignupPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { setCurrentUser, setUserId } = useAuth();
   const initialValues = {
     email: "",
     password: "",
@@ -21,7 +23,6 @@ function SignupPage() {
       values.firstName &&
       values.lastName
     ) {
-
       try {
         const response = await fetch(
           `${import.meta.env.VITE_APP_API_URL}/users`,
@@ -38,16 +39,18 @@ function SignupPage() {
           }
         );
         const user = await response.json();
-        if (isEmptyArray(user)) toast("User doesn't exist", { type: "error" });
+        if (!user) toast("Something wnet wrong", { type: "error" });
         else {
-          toast("Login Successful", { type: "success" });
-          dispatch(setToken(user[0].token));
-          localStorage.setItem("userId", user[0].id);
+          toast("Signup Successful", { type: "success" });
 
+          dispatch(setToken(user.token));
+          localStorage.setItem("userId", JSON.stringify(user.id));
+          setUserId(user.id);
+          setCurrentUser(user);
           navigate("/");
         }
       } catch (error) {
-        console.log(error);
+        toast(error, { type: error });
       }
     } else {
       toast("Please fill the details", { type: "error" });
