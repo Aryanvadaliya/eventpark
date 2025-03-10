@@ -20,7 +20,7 @@ import CheckoutPage from "../pages/CheckoutPage";
 import Dashboard from "../pages/admin/Dashboard";
 import { ReduxState } from "../utils/types";
 import PaymentPage from "../pages/PaymentPage";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import TicketPage from "../pages/TicketPage";
 import { RolesAuth } from "../Components.tsx/RolesAuth";
 

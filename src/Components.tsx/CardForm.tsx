@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useFetch } from "../hooks/useFetch";
 import { useDispatch, useSelector } from "react-redux";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 function CardForm({
   totalPrice,

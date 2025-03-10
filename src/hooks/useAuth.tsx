@@ -19,8 +19,6 @@ interface AuthContextProps {
   logout?: () => void;
 }
 
-// localStorage.clear()
-
 const AuthContext = createContext<AuthContextProps>({});
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -60,6 +58,7 @@ export default function AuthProvider({ children }) {
     setUserId(undefined);
     dispatch(removeAuth());
     localStorage.removeItem("userId");
+    navigate('/')
   };
 
   return (

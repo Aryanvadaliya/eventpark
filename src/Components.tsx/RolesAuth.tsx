@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from "react";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 type Role = string;

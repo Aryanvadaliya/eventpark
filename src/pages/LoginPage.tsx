@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { setToken } from "../store/authSlice";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 function LoginPage() {
   const navigate = useNavigate();

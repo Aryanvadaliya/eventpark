@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 import { CircularProgress } from "@mui/material";
 
 function MasterLayout() {
