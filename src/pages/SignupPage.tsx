@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { setToken } from "../store/authSlice";
 import { useDispatch } from "react-redux";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 function SignupPage() {
   const navigate = useNavigate();

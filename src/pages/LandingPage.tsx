@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import EventBox from "../Components.tsx/EventBox";
 import { useDebounce } from "../hooks/useDebounce";
-import { useAuth } from "../hooks/AuthContext";
+import { useAuth } from "../hooks/useAuth";
 
 function LandingPage() {
   const [nameInput, setNameInput] = useState("");
