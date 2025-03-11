@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Minus, Plus } from "lucide-react";
 import { useFetch } from "../hooks/useFetch";
@@ -19,12 +19,42 @@ function CheckoutPage() {
     skip: false,
   });
 
-  const [seating, setSeating] = useState<Seating[]>([
-    { zone: "General", price: 500, id: 1, isActive: false, quantity: 0 },
-    { zone: "fanzone", price: 800, id: 2, isActive: false, quantity: 0 },
-    { zone: "VIP zone", price: 1200, id: 3, isActive: false, quantity: 0 },
-    { zone: "VVIP Tables", price: 5000, id: 4, isActive: false, quantity: 0 },
-  ]);
+  const [seating, setSeating] = useState<Seating[]>([]);
+
+useEffect(() => {
+  if (data?.ticketPrice) {
+    setSeating([
+      {
+        zone: "General",
+        price: data.ticketPrice,
+        id: 1,
+        isActive: false,
+        quantity: 0,
+      },
+      {
+        zone: "Fanzone",
+        price: data.ticketPrice + 200,
+        id: 2,
+        isActive: false,
+        quantity: 0,
+      },
+      {
+        zone: "VIP zone",
+        price: data.ticketPrice + 700,
+        id: 3,
+        isActive: false,
+        quantity: 0,
+      },
+      {
+        zone: "VVIP Tables",
+        price: data.ticketPrice + 2000,
+        id: 4,
+        isActive: false,
+        quantity: 0,
+      },
+    ]);
+  }
+}, [data?.ticketPrice]);
 
   const totalPrice = seating.reduce(
     (total, seat) =>

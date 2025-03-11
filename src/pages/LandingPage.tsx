@@ -91,7 +91,7 @@ function LandingPage() {
               <Input
                 placeholder="Explore Events"
                 value={nameInput}
-                className="md:w-[40%] w-full"
+                className="md:w-[40%] w-full mb-3 md:mb-0"
                 onChange={(e) => setNameInput(e.target.value)}
               />
 
@@ -116,7 +116,7 @@ function LandingPage() {
           </div>
           <div className="md:my-6 md:mx-12 mx-4 my-4 font-semibold">
             <h1 className="text-3xl">Explore by categories</h1>
-            <div className=" flex gap-12  items-center overflow-auto my-4">
+            <div className=" flex md:gap-12 gap-6  items-center overflow-auto my-4">
               {categories.map((category: any, index) => {
                 const IconComponent = iconMapping[category?.name];
                 return IconComponent ? (
