@@ -90,7 +90,7 @@ function CardForm({
         disabled={isLoading}
         className="bg-blue-500 p-3 text-white mt-4 w-full"
       >
-        {isLoading ? "Processing" : `Pay ${totalPrice} Rs`}
+        {isLoading ? "Processing" : `Pay ${totalPrice}.00/- Rs.`}
       </button>
     </form>
   );

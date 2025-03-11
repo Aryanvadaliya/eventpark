@@ -41,13 +41,13 @@ export default function AuthProvider({ children }) {
     method: "GET",
     skip: !userId,
   });
-  useEffect(() => {
-    if (userId) {
-      (async function get() {
-        await fetchData();
-      })();
-    }
-  }, [userId]);
+  // useEffect(() => {
+  //   if (userId) {
+  //     (async function get() {
+  //       await fetchData();
+  //     })();
+  //   }
+  // }, [userId]);
 
   useEffect(() => {
     setCurrentUser(data ?? null);

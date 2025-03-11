@@ -13,12 +13,12 @@ function EventDetails({
 }) {
   return (
     <div className="flex md:w-1/2 w-full my-2 items-center">
-      <div className="bg-blue-100 w-[70px] h-[70px] flex justify-center items-center p-2">
+      <div className="bg-blue-100  min-w-[70px] min-h-[70px] w-[70px] h-[70px] flex justify-center items-center p-2">
         {children}
       </div>
-      <div className="ms-6 grow">
+      <div className="ms-6 ">
         <p className="text-lg font-semibold">{title}</p>
-        <p>{value}</p>
+        <p className="text-wrap">{value}</p>
         {extraValue && <p>{extraValue}</p>}
       </div>
     </div>
