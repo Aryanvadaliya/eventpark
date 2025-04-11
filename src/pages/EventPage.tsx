@@ -6,13 +6,12 @@ import { Clock, MapPin, Calendar, Ticket, X } from "lucide-react";
 import EventDetails from "../Components.tsx/EventDetails";
 import { useAuth } from "../hooks/useAuth";
 import EventModal from "../Components.tsx/EventModal";
+import CustomModal from "../Components.tsx/CustomModal";
 
 function EventPage() {
   const { id } = useParams();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [eventData, setEventData] = useState<EventData>();
+  const [eventData, setEventData] = useState<EventData>(null);
   const { currentUser } = useAuth();
-
   useEffect(() => {
     (async function getData() {
       try {
@@ -20,12 +19,20 @@ function EventPage() {
           `${import.meta.env.VITE_APP_API_URL}/events/${id}`
         );
         const eventData = await response.json();
-        setEventData(eventData);
+        setEventData(!(JSON.stringify(eventData) === "{}") && eventData);
       } catch (error) {
         console.log(error);
       }
     })();
   }, []);
+
+  if (!eventData)
+    return (
+      <div className="m-6 flex justify-center">
+        <p>No Event Found</p>
+      </div>
+    );
+
   return (
     <>
       <div className="sm:ms-10 ms-2 my-5 ">
@@ -33,12 +40,21 @@ function EventPage() {
           <p className="text-4xl  text-blue-500">{eventData?.name}</p>
           {currentUser && currentUser.role === "admin" && (
             <div>
-             
               <EventModal eventData={eventData} />
 
-              <button className="bg-red-500 px-4 py-2 text-white rounded-lg mx-6 cursor-pointer">
-                Delete Event
-              </button>
+              <CustomModal
+                buttonText={"Delete Event"}
+                buttonClassName="bg-red-500 px-4 py-2 text-white rounded-lg mx-6 cursor-pointer"
+                headerText={"Delete Event"}
+                eventId={eventData?.id}
+              >
+                <div>
+                  <p className="text-lg">
+                    Are you sure you want to delete this Event ?
+                  </p>
+               
+                </div>
+              </CustomModal>
             </div>
           )}
         </div>
@@ -48,12 +64,13 @@ function EventPage() {
               src={eventData?.image}
               alt=""
               loading="lazy"
-              className="event-picture "
+              className="event-picture w-full"
             />
             <div className="shadow-md  p-4  rounded-md">
               <p className="text-slate-600">Price</p>
               <p>
-                {" "}Starting from{" "}
+                {" "}
+                Starting from{" "}
                 <span className="font-semibold">
                   &#8377; {eventData?.ticketPrice}{" "}
                 </span>

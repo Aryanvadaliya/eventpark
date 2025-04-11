@@ -36,10 +36,10 @@ function EventModal({ eventData = null }) {
   const [isSkip, setIsSkip] = useState(true);
 
   const handleModalClose = () => setIsModalOpen(false);
-  const handleModalOpen = () =>{
-    setIsModalOpen(true)
-    formik.resetForm()
-  } 
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+    formik.resetForm();
+  };
 
   const initialValues = {
     name: "",
@@ -72,8 +72,8 @@ function EventModal({ eventData = null }) {
     reader.readAsDataURL(file);
   };
 
-  const { data } = useFetch({
-    endpoint: `events/${eventData ? eventData.id : ""}`,
+  const { data, isLoading: isDataLoading } = useFetch({
+    endpoint: eventData ? `events/${eventData.id}` : 'events',
     method: eventData ? "PUT" : "POST",
     body: JSON.stringify(values),
     skip: isSkip,
@@ -243,29 +243,6 @@ function EventModal({ eventData = null }) {
                 <label htmlFor="category" className="block mb-1">
                   Category:
                 </label>
-                {/* <Autocomplete
-                  // value={value}
-                  {...getFieldProps("category")}
-                  size="small"
-                  filterOptions={createFilterOptions({
-                    stringify: (option: Options) => option.name,
-                    matchFrom: "start",
-                    limit: 10,
-                  })}
-                  selectOnFocus
-                  clearOnBlur
-                  handleHomeEndKeys
-                  id="free-solo-with-text-demo"
-                  options={categoriesData}
-                  getOptionLabel={(option) => {
-                    return option.name ?? "";
-                  }}
-                  sx={{ width: 300 }}
-                  freeSolo
-                  renderInput={(params) => (
-                    <TextField {...params} label="Select category" />
-                  )}
-                /> */}
                 <TextField
                   name="category"
                   size="small"
@@ -296,6 +273,7 @@ function EventModal({ eventData = null }) {
             <div className="flex w-full justify-end">
               <button
                 type="submit"
+                disabled={isDataLoading}
                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 ms-auto mt-6 mb-2 cursor-pointer"
               >
                 {eventData ? "Update Event" : "Add Event"}
