@@ -4,11 +4,7 @@ import { EventData } from "../utils/types";
 import moment from "moment";
 import { Clock, MapPin, Calendar, Ticket, X } from "lucide-react";
 import EventDetails from "../Components.tsx/EventDetails";
-import { Input, Modal, TextField } from "@mui/material";
-import { useFormik } from "formik";
-import DatePicker from "react-datepicker";
 import { useAuth } from "../hooks/useAuth";
-import EventForm from "./EventForm";
 import EventModal from "../Components.tsx/EventModal";
 
 function EventPage() {
@@ -37,21 +33,7 @@ function EventPage() {
           <p className="text-4xl  text-blue-500">{eventData?.name}</p>
           {currentUser && currentUser.role === "admin" && (
             <div>
-              {/* <button
-                className="bg-blue-500 px-4 py-2 text-white rounded-lg me-6 cursor-pointer"
-                onClick={() => setIsModalOpen(true)}
-              >
-                Edit Event
-              </button>
-              <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)} >
-                <div>
-                  <EventForm
-                    isEdit
-                    onModalClose={() => setIsModalOpen(false)}
-                    
-                  />
-                </div>
-              </Modal> */}
+             
               <EventModal eventData={eventData} />
 
               <button className="bg-red-500 px-4 py-2 text-white rounded-lg mx-6 cursor-pointer">
