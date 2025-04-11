@@ -3,7 +3,6 @@ import {
   Route,
   Routes,
   useLocation,
-  useNavigate,
 } from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
 import EventPage from "../pages/EventPage";
@@ -15,15 +14,12 @@ import AuthLayout from "../Components.tsx/AuthLayout";
 import SignupPage from "../pages/SignupPage";
 import MasterLayout from "../Components.tsx/MasterLayout";
 import { ReactNode, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import CheckoutPage from "../pages/CheckoutPage";
 import Dashboard from "../pages/admin/Dashboard";
-import { ReduxState } from "../utils/types";
 import PaymentPage from "../pages/PaymentPage";
 import { useAuth } from "../hooks/useAuth";
 import TicketPage from "../pages/TicketPage";
 import { RolesAuth } from "../Components.tsx/RolesAuth";
-import EventForm from "../pages/EventForm";
 
 const ProtectedRoute = ({ element }: { element: ReactNode }) => {
   const userId = JSON.parse(localStorage.getItem("userId")) || null;
