@@ -22,16 +22,26 @@ export type Auth = {
 };
 
 export interface UserData {
-  id: string
+  id: string;
   tickets: any;
   firstName: string;
   lastName: string;
   role: string;
-  token : string;
-  email: string
+  token: string;
+  email: string;
 }
-export interface Options { 
-  value: string ;
-  label: string
+export interface Options {
+  value?: string;
+  label?: string;
+  name?: string;
+  id?: string
+}
 
+export interface TicketData {
+  ticketNumber: number;
+  image: string;
+  date: moment.MomentInput;
+  name: string;
+  price: string | number;
+  quantity: string | Number;
 }

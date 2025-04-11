@@ -2,19 +2,19 @@ import { useState, useEffect, useCallback } from "react";
 
 interface UseFetchOptions {
   endpoint: string;
-  method: "GET" | "POST" | "PUT" | "DELETE";
-  body?:  null | string;
+  method?: "GET" | "POST" | "PUT" | "DELETE";
+  body?: null | string;
   skip?: boolean;
 }
 
 export function useFetch({
   endpoint,
-  method,
+  method = "GET",
   body = null,
   skip = false,
 }: UseFetchOptions) {
   const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState<boolean>(!skip);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {

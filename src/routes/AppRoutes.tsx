@@ -23,9 +23,10 @@ import PaymentPage from "../pages/PaymentPage";
 import { useAuth } from "../hooks/useAuth";
 import TicketPage from "../pages/TicketPage";
 import { RolesAuth } from "../Components.tsx/RolesAuth";
+import EventForm from "../pages/EventForm";
 
 const ProtectedRoute = ({ element }: { element: ReactNode }) => {
-  const userId = JSON.parse(localStorage.getItem("userId")) || null
+  const userId = JSON.parse(localStorage.getItem("userId")) || null;
   const location = useLocation();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -66,15 +67,39 @@ export default function AppRoutes() {
         <Route path="categories/:categoryName" element={<CategoryPage />} />
         <Route
           path="event/:id/checkout"
-          element={<ProtectedRoute element={<CheckoutPage />} />}
+          element={
+            <ProtectedRoute
+              element={
+                <RolesAuth roles={["user"]}>
+                  <CheckoutPage />
+                </RolesAuth>
+              }
+            />
+          }
         />
         <Route
           path="/my-tickets"
-          element={<ProtectedRoute element={<TicketPage />} />}
+          element={
+            <ProtectedRoute
+              element={
+                <RolesAuth roles={["user"]}>
+                  <TicketPage />
+                </RolesAuth>
+              }
+            />
+          }
         />
         <Route
           path="/payment"
-          element={<ProtectedRoute element={<PaymentPage />} />}
+          element={
+            <ProtectedRoute
+              element={
+                <RolesAuth roles={["user"]}>
+                  <PaymentPage />
+                </RolesAuth>
+              }
+            />
+          }
         />
         <Route
           path="/dashboard"

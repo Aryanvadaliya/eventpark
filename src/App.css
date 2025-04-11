@@ -1,3 +1,16 @@
 .event-picture{
     aspect-ratio: 3/2;
+   
+}
+.react-datepicker-wrapper{
+    width: 100%;
+    border: 10px solid gray
+}
+/* .MuiInputBase-input{
+    padding: 10px !important;
+} */
+
+.css-101dune0f-MuiInputBase-input-MuiOutlinedInput-input{
+    padding: 10px !important;
+
 }

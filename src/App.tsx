@@ -7,6 +7,8 @@ import { Provider } from "react-redux";
 import { persistor, store } from "./store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import AuthProvider from "./hooks/useAuth";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider/LocalizationProvider";
 
 function App() {
   return (
@@ -15,9 +17,14 @@ function App() {
         <Provider store={store}>
           <PersistGate persistor={persistor}>
             <AuthProvider>
+              <LocalizationProvider
+                dateAdapter={AdapterMoment}
+                adapterLocale="EN-GB"
+              >
               <AppRoutes />
-              <ToastContainer className={'m-4'}/>
-              <Outlet />
+              <ToastContainer className={"m-4"} />
+                <Outlet />
+              </LocalizationProvider>
             </AuthProvider>
           </PersistGate>
         </Provider>

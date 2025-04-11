@@ -1,6 +1,7 @@
 import moment from "moment";
 import { useAuth } from "../hooks/useAuth";
 import { Link } from "react-router-dom";
+import { TicketData } from "../utils/types";
 
 function TicketPage() {
   const { currentUser } = useAuth();
@@ -8,12 +9,16 @@ function TicketPage() {
   return (
     <>
       <div className="text-2xl m-4">My tickets</div>
-      <div className="m-4">
+      <div className="m-4 flex flex-wrap gap-4">
         {currentUser?.tickets?.length > 0 ? (
           currentUser?.tickets?.map((ticket) => (
-            <div className="border border-blue-500 px-4 py-2 md:w-1/2 rounded-lg flex m-4">
-              <img src={ticket.image} alt="" className="w-1/2" />
-              <div className="w-1/2 ms-2">
+            <div className="border border-blue-500 px-4 py-2 md:w-1/2 rounded-lg flex sm:flex-nowrap flex-wrap " key={ticket.ticketNumber}>
+              <img src={ticket.image} alt="" className="sm:w-1/2" />
+              <div className="sm:w-1/2 ms-2 py-3">
+              <p>
+                  <span className="font-bold me-3">Ticket Number: </span>{" "}
+                  {ticket.ticketNumber}
+                </p>
                 <p>
                   <span className="font-bold me-3">Date:</span>{" "}
                   {moment(ticket.date).format("ddd ,DD MMM YYYY")}

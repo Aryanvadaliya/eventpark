@@ -12,6 +12,8 @@ interface Seating {
 }
 
 function CheckoutPage() {
+  console.log("ibvuiwrhiogeivbuoewb gjnwren");
+  
   const { id } = useParams();
   const { data, isLoading } = useFetch({
     endpoint: `events/${id}`,
@@ -21,40 +23,40 @@ function CheckoutPage() {
 
   const [seating, setSeating] = useState<Seating[]>([]);
 
-useEffect(() => {
-  if (data?.ticketPrice) {
-    setSeating([
-      {
-        zone: "General",
-        price: data.ticketPrice,
-        id: 1,
-        isActive: false,
-        quantity: 0,
-      },
-      {
-        zone: "Fanzone",
-        price: data.ticketPrice + 200,
-        id: 2,
-        isActive: false,
-        quantity: 0,
-      },
-      {
-        zone: "VIP zone",
-        price: data.ticketPrice + 700,
-        id: 3,
-        isActive: false,
-        quantity: 0,
-      },
-      {
-        zone: "VVIP Tables",
-        price: data.ticketPrice + 2000,
-        id: 4,
-        isActive: false,
-        quantity: 0,
-      },
-    ]);
-  }
-}, [data?.ticketPrice]);
+  useEffect(() => {
+    if (data?.ticketPrice) {
+      setSeating([
+        {
+          zone: "General",
+          price: data.ticketPrice,
+          id: 1,
+          isActive: false,
+          quantity: 0,
+        },
+        {
+          zone: "Fanzone",
+          price: data.ticketPrice + 200,
+          id: 2,
+          isActive: false,
+          quantity: 0,
+        },
+        {
+          zone: "VIP zone",
+          price: data.ticketPrice + 700,
+          id: 3,
+          isActive: false,
+          quantity: 0,
+        },
+        {
+          zone: "VVIP Tables",
+          price: data.ticketPrice + 2000,
+          id: 4,
+          isActive: false,
+          quantity: 0,
+        },
+      ]);
+    }
+  }, [data?.ticketPrice]);
 
   const totalPrice = seating.reduce(
     (total, seat) =>
@@ -70,14 +72,14 @@ useEffect(() => {
     setSeating(newSeating);
   };
 
-  const handleQuantity = (e: any) => {
-    if (e.target.id === "plus") {
+  const handleQuantity = (eventType: string) => {
+    if (eventType === "plus") {
       setSeating(
         seating.map((seat) =>
           seat.isActive ? { ...seat, quantity: seat.quantity + 1 } : seat
         )
       );
-    } else if (e.target.id === "minus") {
+    } else if (eventType === "minus") {
       setSeating(
         seating.map((seat) =>
           seat.isActive
@@ -111,19 +113,14 @@ useEffect(() => {
                 {seat.isActive ? (
                   <div
                     className="flex gap-2 border-blue-500 border rounded-md px-2 py-1 items-center text-lg "
-                    onClick={handleQuantity}
                   >
-                    <Minus
-                      color="#51a2ff"
-                      id="minus"
-                      className="cursor-pointer"
-                    />
+                    <div id="minus" onClick={() =>handleQuantity("minus")}>
+                      <Minus color="#51a2ff" className="cursor-pointer" />
+                    </div>
                     <p className="text-blue-400">{seat.quantity}</p>
-                    <Plus
-                      color="#51a2ff"
-                      id="plus"
-                      className="cursor-pointer"
-                    />
+                    <div id="plus" onClick={() => handleQuantity("plus")}>
+                      <Plus color="#51a2ff" className="cursor-pointer" />
+                    </div>
                   </div>
                 ) : (
                   <button
@@ -154,8 +151,8 @@ useEffect(() => {
               state={{
                 ticketDetails: {
                   ...seating.filter((seat) => seat.isActive)[0],
-
                   ...data,
+                  ticketNumber: (Math.random() * 10000000).toFixed(0)
                 },
                 totalPrice: totalPrice,
               }}

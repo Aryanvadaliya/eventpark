@@ -6,7 +6,7 @@ import {
   TextField,
 } from "@mui/material";
 import { citiesData } from "../utils/citiesData";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Link } from "react-router-dom";
 import { EventData, Options, ReduxState } from "../utils/types";
 import {
@@ -25,12 +25,12 @@ import {
 import EventBox from "../Components.tsx/EventBox";
 import { useDebounce } from "../hooks/useDebounce";
 import { useAuth } from "../hooks/useAuth";
+import { useFetch } from "../hooks/useFetch";
+import Loader from "../Components.tsx/Loader";
 
 function LandingPage() {
   const [nameInput, setNameInput] = useState("");
-  const [eventList, setEventList] = useState<Array<EventData>>([]);
   const [selectedCity, setSelectedCity] = useState("");
-  const [categories, setCategories] = useState([]);
   const { currentUser, userId } = useAuth();
 
   const debouncedValue = useDebounce(nameInput, 700);
@@ -49,35 +49,11 @@ function LandingPage() {
     "Food & Drink": Soup,
   };
 
-  useEffect(() => {
-    (async function getData() {
-      try {
-        const response = await fetch(
-          `${
-            import.meta.env.VITE_APP_API_URL
-          }/events?name_like=${debouncedValue}&location_like=${selectedCity}`
-        );
-        const eventList = await response.json();
-        setEventList(eventList);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, [debouncedValue, selectedCity]);
+  const { data: eventList, isLoading: isEventsLoading } = useFetch({
+    endpoint: `events?name_like=${debouncedValue}&location_like=${selectedCity}`,
+  });
 
-  useEffect(() => {
-    (async function getCategories() {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_APP_API_URL}/categories`
-        );
-        const categories = await response.json();
-        setCategories(categories);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+  const { data: categories, isLoading } = useFetch({ endpoint: "categories" });
 
   return (
     <>
@@ -107,7 +83,11 @@ function LandingPage() {
                   setSelectedCity(city?.value ?? "")
                 }
                 renderInput={(params) => (
-                  <TextField {...params} label="Select city" />
+                  <TextField
+                    {...params}
+                    label="Search city"
+                    placeholder="Start typing"
+                  />
                 )}
                 getOptionLabel={(option) => option.label}
                 autoSelect
@@ -117,26 +97,33 @@ function LandingPage() {
           <div className="md:my-6 md:mx-12 mx-4 my-4 font-semibold">
             <h1 className="text-3xl">Explore by categories</h1>
             <div className=" flex md:gap-12 gap-6  items-center overflow-auto my-4">
-              {categories.map((category: any, index) => {
-                const IconComponent = iconMapping[category?.name];
-                return IconComponent ? (
-                  <Link
-                    to={`categories/${category.name}`}
-                    key={index}
-                    className="min-w-[100px] min-h-[100px] rounded-md bg-slate-200 flex flex-col justify-center items-center"
-                  >
-                    <IconComponent />
-                    <p>{category.name}</p>
-                  </Link>
-                ) : null;
-              })}
+              {categories &&
+                categories.map((category: any, index) => {
+                  const IconComponent = iconMapping[category?.name];
+                  return IconComponent ? (
+                    <Link
+                      to={`categories/${category.name}`}
+                      key={index}
+                      className="min-w-[100px] min-h-[100px] rounded-md bg-slate-200 flex flex-col justify-center items-center"
+                    >
+                      <IconComponent />
+                      <p>{category.name}</p>
+                    </Link>
+                  ) : null;
+                })}
             </div>
             <h1 className="text-3xl">Upcoming Events</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-10 justify-items-center mt-4">
-              {eventList?.map((event: EventData) => (
-                <EventBox event={event} key={event.id} />
-              ))}
-            </div>
+            {isLoading ? (
+              <Loader />
+            ) : eventList?.length ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-10 justify-items-center mt-4">
+                {eventList.map((event: EventData) => (
+                  <EventBox event={event} key={event.id} />
+                ))}
+              </div>
+            ) : (
+              <p className="md:my-6">No Events Found, please try later.</p>
+            )}
           </div>
         </>
       )}
