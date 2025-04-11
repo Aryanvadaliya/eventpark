@@ -39,6 +39,7 @@ function EventModal({ eventData = null }) {
   const handleModalOpen = () => {
     setIsModalOpen(true);
     formik.resetForm();
+    if (eventData) setValues({ ...eventData, date: moment(eventData.date) });
   };
 
   const initialValues = {
@@ -73,15 +74,15 @@ function EventModal({ eventData = null }) {
   };
 
   const { data, isLoading: isDataLoading } = useFetch({
-    endpoint: eventData ? `events/${eventData.id}` : 'events',
+    endpoint: eventData ? `events/${eventData.id}` : "events",
     method: eventData ? "PUT" : "POST",
     body: JSON.stringify(values),
     skip: isSkip,
   });
 
-  useEffect(() => {
-    if (eventData) setValues({ ...eventData, date: moment(eventData.date) });
-  }, [eventData]);
+  // useEffect(() => {
+  //   if (eventData) setValues({ ...eventData, date: moment(eventData.date) });
+  // }, [eventData]);
 
   useEffect(() => {
     let timerId = null;
