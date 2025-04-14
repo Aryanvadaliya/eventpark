@@ -52,7 +52,7 @@ function CustomModal({
           }}
         >
           <div className="flex justify-between">
-            <p className="text-2xl">{headerText}</p>
+          <p className="text-2xl">{headerText}</p>
 
             <X onClick={handleModalClose} className="cursor-pointer"/>
           </div>

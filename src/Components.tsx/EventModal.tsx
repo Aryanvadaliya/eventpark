@@ -1,9 +1,4 @@
-import {
-  Autocomplete,
-  createFilterOptions,
-  Modal,
-  TextField,
-} from "@mui/material";
+import { Modal, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -13,6 +8,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
+import { EventData } from "../utils/types";
 
 const validationSchema = {
   name: Yup.string().required(),
@@ -28,7 +24,13 @@ const validationSchema = {
   duration: Yup.string().required(),
 };
 
-function EventModal({ eventData = null }) {
+function EventModal({
+  eventData,
+  updateEventData,
+}: {
+  eventData?: EventData;
+  updateEventData?: (data: EventData) => void;
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -78,19 +80,19 @@ function EventModal({ eventData = null }) {
     skip: isSkip,
   });
 
-
   useEffect(() => {
     let timerId = null;
     if (!data) return;
     if (data.name && eventData) {
       toast("Event Updated", { type: "success", autoClose: 2000 });
       handleModalClose();
-      timerId = setTimeout(() => window.location.reload(), 2000);
+      updateEventData(data);
     } else {
       toast("Event Added", { type: "success", autoClose: 2000 });
       handleModalClose();
       timerId = setTimeout(() => navigate(`event/${data.id}`), 2000);
     }
+    setIsSkip(true);
     return () => {
       if (timerId) clearTimeout(timerId);
     };

@@ -10,7 +10,7 @@ import CustomModal from "../Components.tsx/CustomModal";
 
 function EventPage() {
   const { id } = useParams();
-  const [eventData, setEventData] = useState<EventData>(null);
+  const [eventData, setEventData] = useState<EventData | null>(null);
   const { currentUser, isAdmin } = useAuth();
   useEffect(() => {
     (async function getData() {
@@ -40,7 +40,7 @@ function EventPage() {
           <p className="text-4xl  text-blue-500">{eventData?.name}</p>
           {currentUser && isAdmin && (
             <div>
-              <EventModal eventData={eventData} />
+              <EventModal eventData={eventData} updateEventData={setEventData} />  
 
               <CustomModal
                 buttonText={"Delete Event"}
