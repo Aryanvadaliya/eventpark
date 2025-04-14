@@ -113,7 +113,7 @@ function LandingPage() {
                 })}
             </div>
             <h1 className="text-3xl">Upcoming Events</h1>
-            {isLoading ? (
+            {isEventsLoading ? (
               <Loader />
             ) : eventList?.length ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-10 justify-items-center mt-4">

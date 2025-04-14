@@ -12,11 +12,10 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 function Navbar() {
-  const { currentUser } = useAuth();
+  const { currentUser, isAdmin } = useAuth();
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState();
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const handleClose = () => setIsUserMenuOpen(false);
 
   const handleProfileClick = (event: any) => {
@@ -24,11 +23,7 @@ function Navbar() {
     setIsUserMenuOpen(true);
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(true);
-  };
 
-  const handleSidebarClose = () => setIsSidebarOpen(false);
 
   return (
     <>
@@ -65,7 +60,7 @@ function Navbar() {
           className="mt-4"
         >
           <div className="px-4 py-2 flex flex-col gap-3">
-          <Link
+            <Link
               to={"/"}
               className="flex gap-4 items-cente"
               onClick={handleClose}
@@ -74,15 +69,19 @@ function Navbar() {
               Home
             </Link>
             <hr />
-            <Link
-              to={"/my-tickets"}
-              className="flex gap-4 items-cente"
-              onClick={handleClose}
-            >
-              <Ticket />
-              My tickets
-            </Link>
-            <hr />
+            {!isAdmin && (
+              <>
+                <Link
+                  to={"/my-tickets"}
+                  className="flex gap-4 items-cente"
+                  onClick={handleClose}
+                >
+                  <Ticket />
+                  My tickets
+                </Link>
+                <hr />
+              </>
+            )}
             <Link
               to={"/logout"}
               className=" flex gap-4 items-center text-red-500"
@@ -93,37 +92,6 @@ function Navbar() {
             </Link>
           </div>
         </Popover>
-        {/* <Menu onClick={toggleSidebar} className="cursor-pointer md:hidden" /> */}
-
-        {/* <Drawer
-          open={isSidebarOpen}
-          anchor="right"
-          onClose={handleSidebarClose}
-        >
-          <div className="px-4 py-2 flex flex-col justify-between h-screen  gap-3">
-            <div>
-              <p className="text-xl font-bold underline">Menu</p>
-
-              <Link
-                to={"/my-tickets"}
-                className="flex gap-4 items-cente"
-                onClick={handleClose}
-              >
-                <Ticket />
-                My tickets  
-              </Link>
-              <hr />
-            </div>
-            <Link
-              to={"/logout"}
-              className=" flex gap-4 items-center text-red-500"
-              onClick={handleClose}
-            >
-              <LogOut color="#fb2c36" />
-              Logout
-            </Link>
-          </div>
-        </Drawer> */}
 
         {!currentUser && (
           <div>

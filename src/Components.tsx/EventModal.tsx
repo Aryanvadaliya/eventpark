@@ -4,7 +4,7 @@ import {
   Modal,
   TextField,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { X } from "lucide-react";
@@ -13,7 +13,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
-import { Options } from "../utils/types";
 
 const validationSchema = {
   name: Yup.string().required(),
@@ -57,7 +56,6 @@ function EventModal({ eventData = null }) {
   const handleSubmit = () => {
     setIsSkip(false);
   };
-  const { data: categoriesData } = useFetch({ endpoint: "categories" });
 
   const formik = useFormik({
     onSubmit: handleSubmit,
@@ -80,9 +78,6 @@ function EventModal({ eventData = null }) {
     skip: isSkip,
   });
 
-  // useEffect(() => {
-  //   if (eventData) setValues({ ...eventData, date: moment(eventData.date) });
-  // }, [eventData]);
 
   useEffect(() => {
     let timerId = null;
@@ -163,8 +158,8 @@ function EventModal({ eventData = null }) {
                   {...getFieldProps("description")}
                   className="mb-4"
                   multiline
-                  error={!!errors.name}
-                  helperText={!!errors.name && errors.description}
+                  error={!!errors.description}
+                  helperText={!!errors.description && errors.description}
                 />
               </div>
               <div className="md:w-5/12 w-full ">

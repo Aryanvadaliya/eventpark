@@ -23,15 +23,18 @@ function LoginPage() {
           }&password_like=${values.password}`
         );
         const user = await response.json();
-        
         if (isEmptyArray(user)) toast("User doesn't exist", { type: "error" });
         else {
           toast("Login Successful", { type: "success" });
           dispatch(setToken(user[0].token));
           localStorage.setItem("userId", JSON.stringify(user[0].id));
           setUserId(user[0].id);
-          setCurrentUser(user[0])
-          navigate(pathname);
+          setCurrentUser(user[0]);
+          navigate(
+            pathname.includes("checkout") && user[0].role === "admin"
+              ? "/"
+              : pathname
+          );
         }
       } catch (error) {
         console.log(error);

@@ -17,6 +17,7 @@ interface AuthContextProps {
   userId?: string;
   setUserId?: Dispatch<string>;
   logout?: () => void;
+  isAdmin?: boolean;
 }
 
 const AuthContext = createContext<AuthContextProps>({});
@@ -36,18 +37,11 @@ export default function AuthProvider({ children }) {
       return null;
     }
   });
-  const { data, fetchData } = useFetch({
+  const { data } = useFetch({
     endpoint: `users/${userId}`,
     method: "GET",
     skip: !userId,
   });
-  // useEffect(() => {
-  //   if (userId) {
-  //     (async function get() {
-  //       await fetchData();
-  //     })();
-  //   }
-  // }, [userId]);
 
   useEffect(() => {
     setCurrentUser(data ?? null);
@@ -61,6 +55,8 @@ export default function AuthProvider({ children }) {
     navigate('/')
   };
 
+  const isAdmin = currentUser?.role === 'admin' ? true  :false
+
   return (
     <AuthContext.Provider
       value={{
@@ -69,6 +65,7 @@ export default function AuthProvider({ children }) {
         setUserId,
         userId,
         logout,
+        isAdmin
       }}
     >
       {children}

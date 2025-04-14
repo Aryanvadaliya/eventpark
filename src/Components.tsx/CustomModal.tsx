@@ -54,16 +54,16 @@ function CustomModal({
           <div className="flex justify-between">
             <p className="text-2xl">{headerText}</p>
 
-            <X onClick={handleModalClose} />
+            <X onClick={handleModalClose} className="cursor-pointer"/>
           </div>
           <hr />
           <div className="pt-8">{children}</div>
           <div className="flex justify-end mt-6 ">
-            <button className="bg-slate-300 px-6 py-2 rounded-lg me-6">
+            <button className="bg-slate-300 px-6 py-2 rounded-lg me-6 cursor-pointer">
               Cancel
             </button>
             <button
-              className="bg-red-500 text-white px-6 py-2 rounded-lg"
+              className="bg-red-500 text-white px-6 py-2 rounded-lg cursor-pointer"
               onClick={handleDeleteEvent}
               disabled={isLoading}
             >

@@ -11,7 +11,7 @@ import CustomModal from "../Components.tsx/CustomModal";
 function EventPage() {
   const { id } = useParams();
   const [eventData, setEventData] = useState<EventData>(null);
-  const { currentUser } = useAuth();
+  const { currentUser, isAdmin } = useAuth();
   useEffect(() => {
     (async function getData() {
       try {
@@ -38,7 +38,7 @@ function EventPage() {
       <div className="sm:ms-10 ms-2 my-5 ">
         <div className="flex justify-between me-6 items-center mb-4 flex-wrap">
           <p className="text-4xl  text-blue-500">{eventData?.name}</p>
-          {currentUser && currentUser.role === "admin" && (
+          {currentUser && isAdmin && (
             <div>
               <EventModal eventData={eventData} />
 
@@ -52,7 +52,6 @@ function EventPage() {
                   <p className="text-lg">
                     Are you sure you want to delete this Event ?
                   </p>
-               
                 </div>
               </CustomModal>
             </div>
@@ -77,7 +76,7 @@ function EventPage() {
                 / Ticket
               </p>
             </div>
-            {currentUser?.role !== "admin" && (
+            {!isAdmin && (
               <Link
                 to={`/event/${id}/checkout`}
                 state={{ from: `/event/${id}` }}
