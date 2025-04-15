@@ -7,26 +7,26 @@ import EventDetails from "../Components.tsx/EventDetails";
 import { useAuth } from "../hooks/useAuth";
 import EventModal from "../Components.tsx/EventModal";
 import CustomModal from "../Components.tsx/CustomModal";
+import { useFetch } from "../hooks/useFetch";
+import Loader from "../Components.tsx/Loader";
 
 function EventPage() {
   const { id } = useParams();
   const [eventData, setEventData] = useState<EventData | null>(null);
   const { currentUser, isAdmin } = useAuth();
-  useEffect(() => {
-    (async function getData() {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_APP_API_URL}/events/${id}`
-        );
-        const eventData = await response.json();
-        setEventData(!(JSON.stringify(eventData) === "{}") && eventData);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
 
-  if (!eventData)
+  const { data, isLoading, error } = useFetch({ endpoint: `events/${id}` });
+
+  useEffect(() => {
+    if (data && Object.keys(data).length > 0) setEventData(data);
+  }, [data]);
+  if (isLoading) return <Loader />;
+  if (error) {
+    return (
+      <p className="text-red-500 text-center mt-4">Error loading event.</p>
+    );
+  }
+  if (!eventData && !isLoading && !error)
     return (
       <div className="m-6 flex justify-center">
         <p>No Event Found</p>
@@ -40,7 +40,10 @@ function EventPage() {
           <p className="text-4xl  text-blue-500">{eventData?.name}</p>
           {currentUser && isAdmin && (
             <div>
-              <EventModal eventData={eventData} updateEventData={setEventData} />  
+              <EventModal
+                eventData={eventData}
+                updateEventData={setEventData}
+              />
 
               <CustomModal
                 buttonText={"Delete Event"}
