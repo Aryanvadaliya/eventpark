@@ -82,7 +82,7 @@ function EventPage() {
             {!isAdmin && (
               <Link
                 to={`/event/${id}/checkout`}
-                state={{ from: `/event/${id}` }}
+                // state={{ from: `/event/${id}` }}
                 className="bg-blue-500 block text-center w-full text-white py-2 rounded-md mt-4"
               >
                 Purchase Ticket
@@ -104,15 +104,18 @@ function EventPage() {
               <EventDetails title="Duration" value={eventData?.duration}>
                 <Clock size={32} color="#2b7fff" />
               </EventDetails>
-              {eventData?.isMticketAvailable && (
-                <EventDetails title="M-Ticket" value={"M-Ticket Available"}>
-                  <Ticket size={32} color="#2b7fff" />
-                </EventDetails>
-              )}
+
+              <EventDetails title="M-Ticket" value={"M-Ticket Available"}>
+                <Ticket size={32} color="#2b7fff" />
+              </EventDetails>
             </div>
             <div>
               <p className="text-2xl font-semibold">Description</p>
-              <p>{eventData?.description}</p>
+              <div>
+                {eventData?.description.split("\n").map((line, id) => (
+                  <p key={id}>{line}</p>
+                ))}
+              </div>
             </div>
           </div>
         </div>

@@ -17,7 +17,7 @@ const validationSchema = {
   location: Yup.string().required(),
   availableSeats: Yup.number().min(5, "Minimum 5 Tickets are required!"),
   ticketPrice: Yup.number()
-    .required()
+    .required("Ticket price is required")
     .min(99, "Minimum Ticket Price should be 99 Rs"),
   image: Yup.string().required(),
   category: Yup.string().required(),
@@ -64,7 +64,8 @@ function EventModal({
     initialValues,
     validationSchema: Yup.object().shape(validationSchema),
   });
-  const { getFieldProps, values, setFieldValue, errors, setValues } = formik;
+  const { getFieldProps, values, setFieldValue, errors, setValues, touched } =
+    formik;
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -101,14 +102,14 @@ function EventModal({
   return (
     <>
       <button
-        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 ms-auto my-6 cursor-pointer"
+        className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 ms-auto my-6 cursor-pointer"
         onClick={handleModalOpen}
       >
         {eventData ? "Edit Event" : "Add Event"}
       </button>
       <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div
-          className="bg-white p-6 rounded-md shadow-lg w-full max-w-[90%] md:max-w-[700px] max-h-[80%] overflow-auto"
+          className="bg-white p-6 rounded-md shadow-lg w-full max-w-[90%]  md:max-w-[700px] max-h-[90%] h-fit overflow-auto"
           style={{
             position: "absolute",
             top: "50%",
@@ -116,7 +117,7 @@ function EventModal({
             transform: "translate(-50%, -50%)",
           }}
         >
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-4  bg-white">
             <p className="text-2xl font-semibold">
               {eventData ? "Edit Event" : "Add Event"}
             </p>
@@ -144,8 +145,8 @@ function EventModal({
                   fullWidth
                   {...getFieldProps("name")}
                   className="mb-4"
-                  error={!!errors.name}
-                  helperText={!!errors.name && errors.name}
+                  error={!!errors.name && touched.name}
+                  helperText={!!errors.name && touched.name && errors.name}
                 />
               </div>
               <div className="md:w-5/12 w-full ">
@@ -160,8 +161,13 @@ function EventModal({
                   {...getFieldProps("description")}
                   className="mb-4"
                   multiline
-                  error={!!errors.description}
-                  helperText={!!errors.description && errors.description}
+                  maxRows={5}
+                  error={!!errors.description && touched.description}
+                  helperText={
+                    !!errors.description &&
+                    touched.description &&
+                    errors.description
+                  }
                 />
               </div>
               <div className="md:w-5/12 w-full ">
@@ -186,8 +192,10 @@ function EventModal({
                   fullWidth
                   {...getFieldProps("location")}
                   className="mb-4"
-                  error={!!errors.location}
-                  helperText={!!errors.location && errors.location}
+                  error={!!errors.location && touched.location}
+                  helperText={
+                    !!errors.location && touched.location && errors.location
+                  }
                 />
               </div>
               <div className="md:w-5/12 w-full ">
@@ -202,8 +210,12 @@ function EventModal({
                   type="number"
                   {...getFieldProps("availableSeats")}
                   className="mb-4"
-                  error={!!errors.availableSeats}
-                  helperText={!!errors.availableSeats && errors.availableSeats}
+                  error={!!errors.availableSeats && touched.availableSeats}
+                  helperText={
+                    !!errors.availableSeats &&
+                    touched.availableSeats &&
+                    errors.availableSeats
+                  }
                 />
               </div>
               <div className="md:w-5/12 w-full ">
@@ -218,8 +230,12 @@ function EventModal({
                   type="number"
                   {...getFieldProps("ticketPrice")}
                   className="mb-4"
-                  error={!!errors.ticketPrice}
-                  helperText={!!errors.ticketPrice && errors.ticketPrice}
+                  error={!!errors.ticketPrice && touched.ticketPrice}
+                  helperText={
+                    !!errors.ticketPrice &&
+                    touched.ticketPrice &&
+                    errors.ticketPrice
+                  }
                 />
               </div>
               <div className="md:w-5/12 w-full ">
@@ -233,8 +249,8 @@ function EventModal({
                   fullWidth
                   onChange={handleFileChange}
                   className="mb-4"
-                  error={!!errors.image}
-                  helperText={!!errors.image && errors.image}
+                  error={!!errors.image && touched.image}
+                  helperText={!!errors.image && touched.image && errors.image}
                 />
               </div>
               <div className="md:w-5/12 w-full ">
@@ -248,8 +264,10 @@ function EventModal({
                   fullWidth
                   {...getFieldProps("category")}
                   className="mb-4"
-                  error={!!errors.category}
-                  helperText={!!errors.category && errors.category}
+                  error={!!errors.category && touched.category}
+                  helperText={
+                    !!errors.category && touched.category && errors.category
+                  }
                 />
               </div>
               <div className="md:w-5/12 w-full ">
@@ -263,8 +281,10 @@ function EventModal({
                   fullWidth
                   {...getFieldProps("duration")}
                   className="mb-4"
-                  error={!!errors.duration}
-                  helperText={!!errors.duration && errors.duration}
+                  error={!!errors.duration && touched.duration}
+                  helperText={
+                    !!errors.duration && touched.duration && errors.duration
+                  }
                 />
               </div>
             </div>

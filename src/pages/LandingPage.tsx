@@ -6,7 +6,7 @@ import {
   TextField,
 } from "@mui/material";
 import { citiesData } from "../utils/citiesData";
-import {  useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { EventData, Options, ReduxState } from "../utils/types";
 import {
@@ -27,11 +27,12 @@ import { useDebounce } from "../hooks/useDebounce";
 import { useAuth } from "../hooks/useAuth";
 import { useFetch } from "../hooks/useFetch";
 import Loader from "../Components.tsx/Loader";
+import EventModal from "../Components.tsx/EventModal";
 
 function LandingPage() {
   const [nameInput, setNameInput] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
-  const { currentUser, userId } = useAuth();
+  const { currentUser, userId, isAdmin } = useAuth();
 
   const debouncedValue = useDebounce(nameInput, 700);
 
@@ -62,7 +63,11 @@ function LandingPage() {
       ) : (
         <>
           <div className="w-full bg-blue-950 h-[300px] flex flex-col justify-center items-center text-white text-4xl text-center">
-            <h1 className="mb-4">Pickup your wonderful plans now</h1>
+            {currentUser && isAdmin ? (
+              <h1 className="mb-4">Search events</h1>
+            ) : (
+              <h1 className="mb-4">Pickup your wonderful plans now</h1>
+            )}
             <div className="md:flex md:flex-row flex-col bg-white gap-8 justify-center text-black md:w-1/2 w-[80%] mx-4 p-4">
               <Input
                 placeholder="Explore Events"
@@ -112,7 +117,10 @@ function LandingPage() {
                   ) : null;
                 })}
             </div>
-            <h1 className="text-3xl">Upcoming Events</h1>
+            <div className="flex justify-between items-center">
+              <h1 className="text-3xl">Upcoming Events</h1>
+              {currentUser && isAdmin && <EventModal />}
+            </div>
             {isEventsLoading ? (
               <Loader />
             ) : eventList?.length ? (

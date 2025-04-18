@@ -12,7 +12,6 @@ interface Seating {
 }
 
 function CheckoutPage() {
-  console.log("ibvuiwrhiogeivbuoewb gjnwren");
   
   const { id } = useParams();
   const { data, isLoading } = useFetch({
@@ -42,14 +41,14 @@ function CheckoutPage() {
         },
         {
           zone: "VIP zone",
-          price: data.ticketPrice + 700,
+          price: data.ticketPrice + 500,
           id: 3,
           isActive: false,
           quantity: 0,
         },
         {
           zone: "VVIP Tables",
-          price: data.ticketPrice + 2000,
+          price: data.ticketPrice + 1000,
           id: 4,
           isActive: false,
           quantity: 0,

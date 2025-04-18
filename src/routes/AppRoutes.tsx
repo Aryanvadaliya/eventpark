@@ -1,9 +1,4 @@
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
 import EventPage from "../pages/EventPage";
 import { ErrorComponent } from "../Components.tsx/ErrorBoundry";
@@ -51,12 +46,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<MasterLayout />}>
-        <Route
-          index
-          element={
-            currentUser?.role === "admin" ? <Dashboard /> : <LandingPage />
-          }
-        />
+        <Route index element={<LandingPage />} />
         <Route path="error/*" element={<ErrorComponent />} />
 
         <Route path="event/:id" element={<EventPage />} />

@@ -13,6 +13,8 @@ function LoginPage() {
   const location = useLocation();
   const { pathname } = location.state?.from || { pathname: "/" };
   const { setUserId, setCurrentUser } = useAuth();
+  console.log(location);
+  
 
   const handleSubmit = async (values: any) => {
     if (values.email && values.password) {
